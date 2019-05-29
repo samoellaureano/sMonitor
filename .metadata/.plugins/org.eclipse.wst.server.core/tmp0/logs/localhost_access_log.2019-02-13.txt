@@ -1,0 +1,6 @@
+127.0.0.1 - - [13/Feb/2019:21:26:01 -0200] "GET / HTTP/1.1" 404 1074
+0:0:0:0:0:0:0:1 - - [13/Feb/2019:21:26:01 -0200] "GET /exemploRest/ HTTP/1.0" 404 1078
+0:0:0:0:0:0:0:1 - - [13/Feb/2019:21:27:55 -0200] "GET /exemploRest/imprimebemvindo HTTP/1.1" 200 37
+0:0:0:0:0:0:0:1 - - [13/Feb/2019:21:27:55 -0200] "GET /favicon.ico HTTP/1.1" 404 1085
+0:0:0:0:0:0:0:1 - - [13/Feb/2019:21:28:22 -0200] "GET /exemploRest/imprimebemvindo HTTP/1.1" 200 37
+0:0:0:0:0:0:0:1 - - [13/Feb/2019:21:40:27 -0200] "GET /exemploRest/imprimebemvindo HTTP/1.1" 200 37

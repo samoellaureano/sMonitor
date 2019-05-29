@@ -1,0 +1,245 @@
+package interfacegrafica;
+
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
+
+import classesprodutos.Produto;
+import classesloja.Cupom;
+import classesloja.Loja;
+
+public class InterfaceGrafica {
+	Loja loja = new Loja();
+	
+	private int codigoProduto = 0;
+	
+	public void exibirMenu(){
+		//Criando o menu opções.
+		while (true){
+			int acao = Integer.parseInt(JOptionPane.showInputDialog("Escolha uma opção: \n"
+					+ "1 - ENTRADA EM ESTOQUE\n"
+					+ "2 - ESTOQUE\n"
+					+ "3 - VENDA\n"
+					+ "4 - RELATÓRIO DE VENDAS\n"
+					+ "5 - SAIR", "5"));
+			/*
+			 * Estrutura condicional que verifica qual a opção
+			 * de menu foi escolhida.
+			 */
+			switch (acao){
+			case 1:
+				dadosNovoProduto();
+				break;
+			case 2:
+				exibirEstoque();
+				break;
+			case 3:
+				alteraProdutoVenda();//venda
+				break;
+			case 4:
+				exibirCupons();
+				break;
+			case 5:
+				System.exit(0);
+				break;
+			default:
+				JOptionPane.showMessageDialog(null, "Opção Inexistente", "Erro", JOptionPane.OK_CANCEL_OPTION);
+				break;
+			}//Término estrutura switch()
+			
+		}//Término while()
+		
+	}//Término método exibirMenu()
+	
+	public void dadosNovoProduto(){
+		Object[] options = {"   NOVO PRODUTO   ", "   INCLUIR PRODUTO CADASTRADO   "};
+		int acao = JOptionPane.showOptionDialog(null, "","ENTRADA EM ESTOQUE", 
+		JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,options[0]);
+		
+		switch(acao){
+		case 0:
+			List<Produto> novoProduto = new ArrayList(); //Define lista novoProduto
+			if(loja.getProdutosEmEstoque() != null){
+				novoProduto = loja.getProdutosEmEstoque();
+			}
+			novoProduto.add(solicitaProduto());
+			loja.setProdutosEmEstoque(novoProduto);			
+			break;
+		case 1:
+			alteraProdutoEstoque();//altera produto cadastrado
+			break;
+		default:
+			System.exit(0);
+			break;
+		}//Término estrutura switch()
+		
+	}//Término da método dadosNovoProduto
+	
+	public void exibirEstoque(){
+		String estoque = "";
+		
+		if(loja.getProdutosEmEstoque() != null){
+			for(Produto produtos: loja.getProdutosEmEstoque()){
+				estoque += (produtos.getCodigo() + " ....... " + produtos.getDescricao() + ".......VALOR: " + produtos.getPreco() + ".......QNT: " + produtos.getQuantidade() + "\n");
+			}
+			
+			JOptionPane.showMessageDialog(null, estoque,"ESTOQUE",JOptionPane.INFORMATION_MESSAGE);	
+		}else{
+			JOptionPane.showMessageDialog(null, "NENHUM ITEM CADASTRADO","ESTOQUE",JOptionPane.WARNING_MESSAGE);	
+		}
+		
+	}//Término do método exibirEstoque
+	
+	public Produto solicitaProduto(){
+		Produto produto = new Produto();
+		String descricao = JOptionPane.showInputDialog("Favor informar a descrição do produto: ");
+		double preco = Double.parseDouble(JOptionPane.showInputDialog("Valor de venda do produto: "));
+		int quantidade = Integer.parseInt(JOptionPane.showInputDialog("Informar a quantidade de itens: "));
+		produto.incluirProduto(codigoProduto, descricao, preco, quantidade);
+		this.codigoProduto++;		
+		return produto;
+	}//Término do método solicitaProduto
+	
+	public JComboBox geraLista(){
+		Produto produto = new Produto();
+		List listaProdutos = new ArrayList();//ArrayList não e do tipo Produto
+		
+		for(Produto produtos: loja.getProdutosEmEstoque()){
+			listaProdutos.add(produtos.getCodigo() + " ....... " + produtos.getDescricao() + ".......VALOR: " + produtos.getPreco() + ".......QNT: " + produtos.getQuantidade());
+		}
+		
+		JComboBox comboListaProdutos = new JComboBox(listaProdutos.toArray());
+		
+		return comboListaProdutos;
+	}//Término do metodo geraLista
+	
+	public void alteraProdutoVenda(){
+		Cupom cupom = new Cupom();
+		if(loja.getProdutosEmEstoque() != null){
+			Produto produto = new Produto();
+			List <Produto> listaProdutosAlterado = new ArrayList();
+			String msg = null;
+			List<Cupom> listaCupom = new ArrayList();
+			
+			JComboBox comboListaProdutos = geraLista();
+			
+			Object[] message = {"Produtos Cadastrados ", comboListaProdutos};
+			int option = JOptionPane.showConfirmDialog(null, message, "ESTOQUE", JOptionPane.OK_CANCEL_OPTION);
+			
+			if (option == JOptionPane.OK_OPTION){				
+				int quantidade = Integer.parseInt(JOptionPane.showInputDialog("Informar a quantidade de itens: "));
+				
+				/*
+				 * Define um objeto item do tipo Produto que recebe o 
+				 * item selecionado na JComboBox com o parametro Index
+				 */
+				Produto item = loja.getProdutosEmEstoque().get(comboListaProdutos.getSelectedIndex());
+				
+				//define as variaveis e recebe os atributos do objeto item
+				int qnt = item.getQuantidade();
+				String descricao = item.getDescricao();
+				double preco = item.getPreco();
+				int cod = item.getCodigo();
+				
+				if(qnt - quantidade >= 0){// se o que tem em estoque + o que for vendido for maior que 0 então vende
+					//adiciona o item INCREMENTANDO- Primeiro dou GET no produto selecionado
+					loja.excluirProdutoCadastrado(comboListaProdutos.getSelectedIndex());
+					
+					if(loja.getListaDeCupom() != null){//get na lista caso seja diferente de NULL
+						listaCupom = loja.getListaDeCupom();
+					}
+					
+					msg = ("_____________________________\n<<< CUPOM FISCAL >>>\n\nProduto Vendido: " + descricao + ""
+							+ "\nCodigo do Produto:   " + cod + ""
+							+ "\nQuantidade do Produto:   " + quantidade + ""
+							+ "\nValor do Produto:   " + preco + ""
+							+ "\n\nVALOR DA COMPRA:   " + (preco * quantidade) + "");
+					listaCupom.add(geraCupom(msg));
+					loja.setListaDeCupom(listaCupom);
+					
+					JOptionPane.showMessageDialog(null, msg, "CUPOM",JOptionPane.INFORMATION_MESSAGE);
+					cupom.setValor(preco*quantidade);
+					quantidade *= -1;//inverte o sinal
+					
+					//incluir o produto nos atributos da classe Produto e passar para a classe Venda
+					produto.incluirProduto(cod, descricao, preco, (quantidade + qnt));
+					
+					//por fim GET na lista completa de produtos em estoque
+					listaProdutosAlterado = loja.getProdutosEmEstoque();				
+					listaProdutosAlterado.add(produto);
+					loja.setProdutosEmEstoque(listaProdutosAlterado);
+				}else{
+					JOptionPane.showMessageDialog(null, "Não foi possivel concluir a venda!\nA quantidade de produtos em estoque é: "+ qnt);
+				}
+			}
+		}else{
+			JOptionPane.showMessageDialog(null, "NENHUM ITEM CADASTRADO","ESTOQUE",JOptionPane.WARNING_MESSAGE);
+		}		
+	}//Termino do método alteraProdutoVenda
+	
+	public void alteraProdutoEstoque(){
+		if(loja.getProdutosEmEstoque() != null){
+			Produto produto = new Produto();
+			List <Produto> listaProdutosAlterado = loja.getProdutosEmEstoque();
+			int index = 0;
+			int qnt = 0;
+			String descricao = null;
+			double preco = 0;
+			
+			int cod = Integer.parseInt(JOptionPane.showInputDialog("Informar o codigo do produto: "));		
+			int quantidade = Integer.parseInt(JOptionPane.showInputDialog("Informar a quantidade de itens: "));
+			
+			for(Produto produtos: loja.getProdutosEmEstoque()){
+				if(produtos.getCodigo() == cod){
+					//define as variaveis e recebe os atributos do item da lista de pordutos em estoque
+					qnt = produtos.getQuantidade();
+					descricao = produtos.getDescricao();
+					preco = produtos.getPreco();
+					index = produtos.getCodigo();
+				}
+			}
+			
+			//exclui item da lista passando o codigo do produto
+			loja.excluirProdutoCadastrado(index);
+			
+			//incluir o produto nos atributos da classe Produto
+			produto.incluirProduto(cod, descricao, preco, (quantidade + qnt));
+			
+			//get nos produtos em estoque
+			listaProdutosAlterado = loja.getProdutosEmEstoque();				
+			listaProdutosAlterado.add(produto); //adiciona um novo item na lista passando como parametro os atributos do objeto produto
+			loja.setProdutosEmEstoque(listaProdutosAlterado);
+		}else{
+			JOptionPane.showMessageDialog(null, "NENHUM ITEM CADASTRADO","ESTOQUE",JOptionPane.WARNING_MESSAGE);
+		}		
+	}//Termino do método alteraProdutoEstoque
+	
+	public void exibirCupons(){
+		if(loja.getListaDeCupom() != null){
+			String message = "";
+			String cupons = "";
+			double valor = 0;
+			
+			for(Cupom cupom: loja.getListaDeCupom()){
+				cupons += (cupom.getCupom() + "\n\n");
+				valor += cupom.getValor();
+				
+			}
+			
+			JOptionPane.showMessageDialog(null, message,"LISTA DE CUPOM",JOptionPane.INFORMATION_MESSAGE);			
+		}else{
+			JOptionPane.showMessageDialog(null, "NENHUM ITEM VENDIDO","LISTA DE CUPOM",JOptionPane.WARNING_MESSAGE);
+		}
+	}// Término do método relatorioVendas
+	
+	public Cupom geraCupom(String msg){
+		Cupom cupom = new Cupom();
+		
+		cupom.setCupom(msg);
+		
+		return cupom;
+	}
+	
+	
+}

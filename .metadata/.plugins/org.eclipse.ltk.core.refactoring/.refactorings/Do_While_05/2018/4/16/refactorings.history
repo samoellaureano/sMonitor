@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">&#x0A;<refactoring comment="Rename resource &apos;Do_While/src/While.java&apos; to &apos;Do_While.java&apos;" description="Rename resource &apos;While.java&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/While.java" name="Do_While.java" stamp="1524010939727" updateReferences="true"/>&#x0A;<refactoring comment="Rename resource &apos;Do_While/src/Do_While.java&apos; to &apos;Do_While_04.java&apos;" description="Rename resource &apos;Do_While.java&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/Do_While.java" name="Do_While_04.java" stamp="1524010948927" updateReferences="true"/>
+</session>

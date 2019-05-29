@@ -1,0 +1,60 @@
+package br.com.monitorDispositivo.script;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Properties;
+
+import javax.mail.Address;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
+public class SendMail {
+
+	public static void enviarEmail (String status, String descritivo, String IPname){
+		Date dataHoraAtual = new Date();
+		String data = new SimpleDateFormat("dd/MM/yyyy").format(dataHoraAtual);
+		String hora = new SimpleDateFormat("HH:mm:ss").format(dataHoraAtual);
+
+        Properties props = new Properties();
+        /** Par�metros de conex�o com servidor Gmail */
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.socketFactory.port", "587");
+        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.starttls.enable", "true");
+
+        Session session = Session.getDefaultInstance(props,
+                    new javax.mail.Authenticator() {
+                         protected PasswordAuthentication getPasswordAuthentication() 
+                         {
+                               return new PasswordAuthentication("pooldelogs@gmail.com", "Alemao03");
+                         }
+                    });
+
+        /** Ativa Debug para sess�o */
+        session.setDebug(true);
+
+        try {
+
+              Message message = new MimeMessage(session);
+              message.setFrom(new InternetAddress("samoel.angelica@fiesc.com.br")); //Remetente
+
+              Address[] toUser = InternetAddress //Destinatário(s)
+                         .parse("samoel.angelica@fiesc.com.br,fabio.bertoni@fiesc.com.br");  
+
+              message.setRecipients(Message.RecipientType.TO, toUser);
+              message.setSubject("sMonitor - " + descritivo + " - " + IPname);//Assunto
+              message.setText(descritivo + " esta " + status + "\nDATA: " + data + "\nHORA: " + hora);
+              /**M�todo para enviar a mensagem criada*/
+              Transport.send(message);
+
+         } catch (MessagingException e) {
+              throw new RuntimeException(e);
+        }
+	}
+}

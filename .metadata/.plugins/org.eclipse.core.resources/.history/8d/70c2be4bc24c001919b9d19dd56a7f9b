@@ -1,0 +1,52 @@
+<script type="text/javascript"
+	src="resources/dispositivo/js/dispositivo.js"></script>
+<link rel="stylesheet" href="resources/dispositivo/css/dispositivo.css"></link>
+<button type="button" class="btn btn-primary" value="true" id="btnMuda" onclick="sMONITOR.dispositivo.muda()">CADASTRAR</button>
+
+<fieldset id="cadastrarField" style="display: none">
+	<legend>Cadastro de Dispositivo</legend>
+	<form id="cadastrarDispositivo" onsubmit="return sMONITOR.dispositivo.cadastrar()">
+		<div class="form-row">
+			<div class="col-md-4 mb-3">
+				<label>Descrição</label> <input type="text" name="txtdesc"
+					class="form-control is-valid" id="desc" placeholder="Descrição"
+					value="" required>
+			</div>
+			<div class="col-md-4 mb-3">
+				<label class="my-1 mr-2" for="inlineFormCustomSelectPref">Protocolo</label>
+				<select class="form-control is-valid" id="protocol"
+					name="txtprotocol" onChange="sMONITOR.dispositivo.protocolo()"
+					required>
+					<option selected>TCP/IP</option>
+					<option value="Telnet">Telnet</option>
+				</select>
+			</div>
+
+			<div class="col-md-4 mb-3">
+				<label>IP/Host-Name</label> <input type="text" name="txtIpHost"
+					class="form-control is-valid" id="IpHost"
+					placeholder="IP/Host-Name" value="" required>
+			</div>
+
+			<div class="col-md-4 mb-3" id="dport" style="display: none">
+				<label>Porta</label> <input type="text" name="txtPorta"
+					class="form-control is-valid" id="porta" placeholder="Porta"
+					value="0" required>
+			</div>
+
+			<!-- <div class="form-group">
+				<div class="form-check">
+					<input class="form-check-input is-invalid" type="checkbox" value=""
+						id="invalidCheck3" required> <label
+						class="form-check-label" for="invalidCheck3"> Concorde com
+						os termos e condições. </label>
+					<div class="invalid-feedback">Você deve concordar antes de
+						enviar.</div>
+				</div>
+			</div>-->
+
+			<button class="btn btn-primary" type="submit">Enviar</button>
+			<button class="btn btn-primary" type="reset" value="Limpar">Limpar</button>
+	</form>
+</fieldset>
+<div id="msg" style="display: none"></div>

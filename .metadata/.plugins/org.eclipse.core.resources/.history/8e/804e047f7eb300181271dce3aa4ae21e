@@ -1,0 +1,50 @@
+package classesprodutos;
+
+public class Produto {
+	
+	private int codigo;
+	private String descricao;
+	private double preco;
+	private int quantidade;
+	
+	public int getCodigo(){
+		return this.codigo;
+	}
+	
+	public void setCodigo(){
+		this.codigo++;
+	}
+	
+	public String getDescricao(){
+		return this.descricao;
+	}
+	
+	public void setDescricao(String descricao){
+		this.descricao = descricao;
+	}
+	
+	public double getPreco(){
+		return this.preco;
+	}
+	
+	public void setPreco(double preco){
+		this.preco = preco;
+	}
+	
+	public int getQuantidade(){
+		return this.quantidade;
+	}
+	
+	public void setQuantidade(int quantidade){
+		this.quantidade = quantidade;
+	}
+		
+	
+	public void incluirProduto(int cod, String descricao, double preco, int quantidade){
+		this.codigo = cod;
+		this.descricao = descricao;
+		this.preco = preco;
+		this.quantidade = quantidade;		
+	}
+
+}

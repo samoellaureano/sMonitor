@@ -1,0 +1,657 @@
+import java.util.Random;
+
+import javax.swing.JOptionPane;
+public class Batalha_Naval {
+	public static String mapa01[][] = new String[10][11];
+	public static String mapa02[][] = new String[10][11];
+	public static String barcos[][] = new String[21][4];
+	public static float placar[] = new float[10];
+	public static String nome[] = new String[10];
+	public static int vida1 = 7, vida2 = 7, partida = 0, acerto1 = 0, acerto2 = 0, erro1 = 0, erro2 = 0, espAcerto = 128, randiC = 0, randiL = 0, novoColuna = 0, novoLinha = 0, C_L = 0;
+
+	public static void main(String[] args) {
+
+		//declarando variáveis
+		String mapa, bomba = "", jogador2;
+		int resp, coluna = 0, linha = 0, reloading = 0;
+		char colunaC, linhaC = '0';
+			
+		do{
+			for (int i = 0; i < 21; i++){
+				for (int j = 0; j < 4; j++){
+					barcos[i][j] = "";
+				}
+			}
+			partida = 0;
+			acerto1 = 0;
+			acerto2 = 0;
+			erro1 = 0;
+			erro2 = 0;
+			vida1 = 7;
+			vida2 = 7;
+			for (int i = 1; i <= 9; i++){
+				for (int j = 0; j < 11; j++){
+					mapa01[i][j] = "     . ";
+					mapa02[i][j] = "     . ";
+				}
+			}
+			int norte = 4, sul = 2, leste = 6, oeste = 3;
+			for (int i = 0; i < 21; i+=4){
+				for (int j = 0; j < 4; j+=2){
+				
+			    	String barco;
+			    	if (i == 17 || i == 19){
+		    			barco = gerador(norte, sul, oeste, leste);
+		    			barcos[i][j] = String.valueOf(barco.charAt(0));
+		    			barcos[i][j+1] = String.valueOf(barco.charAt(1));
+		    			orientacao(barco, 2);
+		    			barcos[i+1][j] = String.valueOf(novoColuna);
+		    			barcos[i+1][j+1] = String.valueOf(novoLinha);	
+		    		}
+		    		else if (i == 8 || i == 11 || i == 14){
+		    			barco = gerador(norte, sul, oeste, leste);
+		    			barcos[i][j] = String.valueOf(barco.charAt(0));
+		    			barcos[i][j+1] = String.valueOf(barco.charAt(1));
+		    			orientacao(barco, 2);
+		    			barcos[i+1][j] = String.valueOf(novoColuna);
+		    			barcos[i+1][j+1] = String.valueOf(novoLinha);
+		    			orientacao(barco, 3);
+		    			barcos[i+2][j] = String.valueOf(novoColuna);
+		    			barcos[i+2][j+1] = String.valueOf(novoLinha);
+		    		}
+		    		else if (i == 0 || i == 4){
+		    			barco = gerador(norte, sul, oeste, leste);
+		    			barcos[i][j] = String.valueOf(barco.charAt(0));
+		    			barcos[i][j+1] = String.valueOf(barco.charAt(1));
+		    			orientacao(barco, 2);
+		    			barcos[i+1][j] = String.valueOf(novoColuna);
+		    			barcos[i+1][j+1] = String.valueOf(novoLinha);
+		    			orientacao(barco, 3);
+		    			barcos[i+2][j] = String.valueOf(novoColuna);
+		    			barcos[i+2][j+1] = String.valueOf(novoLinha);
+		    			orientacao(barco, 4);
+		    			barcos[i+3][j] = String.valueOf(novoColuna);
+		    			barcos[i+3][j+1] = String.valueOf(novoLinha);
+		    		}
+				}
+			  	if (i >= 8){
+			  		if (i == 8){
+				   		sul+= 2;
+				   		norte--;
+				   		oeste--;
+				   		leste++;
+			   		}
+			  		i--;
+			   	}
+			   	if (i >= 15){
+			   		i--;
+			   		if (i == 15){
+				   		sul+= 2;
+				   		norte--;
+				   		oeste--;
+				   		leste++;
+			   		}
+			   	}
+			}
+				
+			String msFim = "";
+			for (int i = 0; i < 21; i++){
+				for (int j = 0; j < 4; j++){
+					msFim += ("(" + barcos[i][j] + ")");
+				}
+				msFim += "\n";
+			}
+				
+			System.out.println(msFim);			
+			
+			for (int i = 0; i < 21; i++){
+				String barco = "";
+				for (int j = 0; j < 2; j++){
+					barco += barcos[i][j];
+				}
+				colunaC = String.valueOf(barco).charAt(0);
+				coluna = Character.getNumericValue(colunaC);
+				linhaC = String.valueOf(barco).charAt(1);
+				linha = Character.getNumericValue(linhaC);
+				if (i < 8){
+					mapa01[linha][coluna] = ("    4 ");
+				}
+				else if (i >= 7 && i < 15 ){
+					mapa01[linha][coluna] = ("    3 ");
+				}
+				else{
+					mapa01[linha][coluna] = ("    2 ");
+				}
+							
+				barco = "";
+				for (int j = 2; j < 4; j++){
+					barco += barcos[i][j];
+				}
+				colunaC = String.valueOf(barco).charAt(0);
+				coluna = Character.getNumericValue(colunaC);
+				linhaC = String.valueOf(barco).charAt(1);
+				linha = Character.getNumericValue(linhaC);
+				if (i < 8){
+					mapa02[linha][coluna] = ("    4 ");
+				}
+				else if (i >= 7 && i < 16 ){
+					mapa02[linha][coluna] = ("    3 ");
+				}
+				else{
+					mapa02[linha][coluna] = ("    2 ");
+				}
+			}
+		
+			Object[] modo = {"   SINGLE PLAYER   ", "   MULTI PLAYER   "}; 
+			int n = JOptionPane.showOptionDialog(null," SELECIONE O MODO DE JOGO","PLAYER SELECT", 
+					JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,modo,modo[0]);
+			if (n == 0){
+				jogador2 = "COMPUTADOR";
+			}
+			else{
+				jogador2 = "JOGADOR 2";
+			}
+			
+			do{
+				do{
+					do{
+						mapa = (espaco(35) + "JOGADOR 1" + espaco(120) + jogador2 + "\n");
+						mapa += ("VIDA: " + vida(vida1) + menosVida(7 - vida1) + espaco(100) 
+									+ "VIDA: " + vida(vida2) + menosVida(7 - vida2) + "\n");
+						mapa += ("ACERTOS: " + acerto1 + espaco(espAcerto) + "ACERTOS: " + acerto2 + "\n");
+						mapa += ("ERROS: " + erro1 + espaco(133) + "ERROS: " + erro2 + "\n\n\n");
+						mapa += "      A     B    C    D     E     F    G     H     I     J     K "
+								+ "                                                                    "
+								+ "     A    B    C    D     E     F    G     H     I     J     K\n";
+		
+						for (int i = 1; i <= 9; i++){
+							mapa += i;
+							for (int j = 0; j < 11; j++){
+								mapa += mapa01[i][j];
+							}
+							mapa += aviao(partida, i);//função incremento do aviao
+				
+							for (int y = 0; y < 11; y++){
+								mapa += mapa02[i][y];
+							}
+							mapa += (espaco(14) + "\n");
+						}
+						mapa += "\n\n ATAQUE!!!! BOMBA (COLUNA+LINHA)\n";
+						
+						if (jogador2.equals("JOGADOR 2")){
+							bomba = JOptionPane.showInputDialog(null, mapa);
+						}
+						else if (partida % 2 == 0 && jogador2.equals("COMPUTADOR")){
+							bomba = JOptionPane.showInputDialog(null, mapa);
+						}
+						else{
+							bomba = robo();
+						}
+										
+					}
+					while (bomba.equals(""));
+					
+					
+					if((bomba.length()) > 1){
+						colunaC = (bomba).charAt(0);
+						linhaC = (bomba).charAt(1);
+						colunaC = (Character.toUpperCase(colunaC));
+						coluna = caracpnum(colunaC);	
+						linha = Character.getNumericValue(linhaC);
+					}					
+				}
+				while (coluna == 11 || linha > 9 || linha == 0 || (bomba.length()) < 2);//repete enquanto coluna linha não exista
+				
+				bombardear(linha,coluna, partida);
+				partida++;
+			}
+			while (acerto1 < 21 && acerto2 < 21);
+			
+			int acerto = 0, erro = 0;
+			String msFinal = "", ganhador = "", msFinalPrimeiro = "";
+			
+			if (acerto1 == 21){
+				msFinalPrimeiro = ("O JOGADOR 01 GANHOU!\n");
+				acerto = acerto1;
+				erro = erro1;
+				ganhador = ("Jogador 01");
+			}
+			else if (acerto2 == 21){
+				msFinalPrimeiro = ("O " + jogador2 + " GANHOU!\n");
+				acerto = acerto2;
+				erro = erro2;
+				ganhador = ("Jogador 02");
+			}
+			
+			if (!ganhador.equals("COMPUTADOR")){
+				nome[reloading] = JOptionPane.showInputDialog(msFinalPrimeiro + "NOVO RECORDE!\n\nSalve seu nome abaixo");
+				erro ++;
+				placar[reloading] = ((acerto / erro) * 45);
+				msFinal += placar(acerto);
+			}			
+		
+			Object[] options = {"   Sim   ", "   Não   "}; 
+			resp = JOptionPane.showOptionDialog(null, msFinal + "\nDESEJA REINICIAR O JOGO?","", 
+			JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,options[0]);
+			reloading++;
+		}
+		while (resp == 0);
+	}
+	
+	public static String aviao (int partida, int i){
+		String msMapa = "";
+		if( partida % 2 == 0){
+			switch (i){
+			case 1:
+				msMapa += (espaco(16) + "< BOMBARDEIRO >" + espaco(16) + i);
+				break;
+			case 2:
+				msMapa += (espaco(67) + i);
+				break;
+			case 3:
+				msMapa += (espaco(35) + "( | ___ . - .   |" + espaco(11) + i);
+				break;
+			case 4:
+				msMapa += (espaco(38) + "== ===_] +" + espaco(10) + i);
+				break;
+			case 5:
+				msMapa += (espaco(57) + "|" + espaco(10) + i);
+				break;
+			case 6:
+				msMapa += (espaco(38) + "` - ." + espaco(24) + i);
+				break;
+			case 7:
+				msMapa += (espaco(46) + "` - >->" + espaco(11) + i);
+				break;
+			case 8:
+				msMapa += (espaco(68) + i);
+				break;
+			case 9:
+				msMapa += (espaco(68) + i);
+				break;
+			}
+		}
+		else{
+			switch (i){
+			case 1:
+				msMapa += (espaco(16) + "< BOMBARDEIRO >" + espaco(16) + i);
+				break;
+			case 2:
+				msMapa += (espaco(67) + i);
+				break;
+			case 3:
+				msMapa += (espaco(11) + "|  . - . __ | )" + espaco(38) + i);
+				break;
+			case 4:
+				msMapa += (espaco(10) + "+ [_=== ==" + espaco(38) + i);
+				break;
+			case 5:
+				msMapa += (espaco(11) + "|" + espaco(56) + i);
+				break;
+			case 6:
+				msMapa += (espaco(24) + ". - ´" + espaco(38) + i);
+				break;
+			case 7:
+				msMapa += (espaco(11) + "<-< - ´" + espaco(46) + i);
+				break;
+			case 8:
+				msMapa += (espaco(68) + i);
+				break;
+			case 9:
+				msMapa += (espaco(68) + i);
+				break;
+			}			
+		}
+		
+		return (msMapa);
+	}
+	
+	public static int caracpnum (char colunaC){
+		int coluna = 0;
+		switch (colunaC){
+		case 'A':
+			coluna = 0;
+			break;
+		case 'B':
+			coluna = 1;
+			break;
+		case 'C':
+			coluna = 2;
+			break;
+		case 'D':
+			coluna = 3;
+			break;
+		case 'E':
+			coluna = 4;
+			break;
+		case 'F':
+			coluna = 5;
+			break;
+		case 'G':
+			coluna = 6;
+			break;
+		case 'H':
+			coluna = 7;
+			break;
+		case 'I':
+			coluna = 8;
+			break;
+		case 'J':
+			coluna = 9;
+			break;
+		case 'K':
+			coluna = 10;
+			break;
+		default:
+			coluna = 11;
+		}
+		return (coluna);
+	}
+	
+	public static void bombardear(int linha, int coluna, int partida){
+		int jog = (partida % 2);
+		if (jog == 0){
+			if (mapa02[linha][coluna].equals("     . ")){
+				tiro(linha, coluna, jog);
+				
+			}
+			else if (mapa02[linha][coluna].equals("    O")){
+				mapa02[linha][coluna] = ("    O");
+			}
+		}
+		else{
+			if (mapa01[linha][coluna].equals("     . ")){
+				tiro(linha, coluna, jog);
+			}
+			else if(mapa01[linha][coluna].equals("    O")){
+				mapa01[linha][coluna] = ("    O");
+			}
+		}
+		
+	}
+	public static String espaco(int largura){
+		String tam = "";
+		for (int i = 0; i < largura; i++){
+			tam += " ";
+		}
+		return (tam);
+	}
+	public static String vida(int qnt){
+		String tam = "";
+		for (int i = 0; i < qnt; i++){
+			tam += " ♥ ";
+		}
+		return (tam);
+	}
+	public static String menosVida(int qnt){
+		String tam = "";
+		for (int i = 0; i < qnt; i++){
+			tam += " ♡  ";
+		}
+		return (tam);
+	}
+	public static void tiro (int linha, int coluna, int jog){
+		String bomba = String.valueOf(linha + "" + coluna);
+		String qnt;
+		
+		switch (bomba){
+		case "56": case "66": case "60": case "61": case "95": case "96": case "82": case "72":
+			qnt = ("    2 ");
+			break;
+		case "21": case "31": case "41": case "75": case "86": case "97": case "28": case "29": case "210": case "48": case "49": case "410": case "98": case "99": case "910": case "65": case "76": case "87":
+			qnt = ("    3 ");
+			break;
+		case "54": case "64": case "74": case "84": case "90": case "91": case "92": case "93": case "32": case "33": case "34": case "35": case "53": case "63": case "73": case "83":
+			qnt = ("    4 ");
+			break;
+		default:
+			qnt = ("    O");
+		}
+		
+		switch (bomba){
+		case "95": case "96": case "82": case "72":case "48": case "49": case "410": case "98": case "99": case "910": case "65": case "76": case "87":case "32": case "33": case "34": case "35": case "53": case "63": case "73": case "83":
+			if (mapa02[linha][coluna].equals("     . ") && jog == 0){
+				mapa02[linha][coluna] = (qnt);
+				acerto1++;
+				if (acerto1 >= 10 && acerto1 < 100){
+					espAcerto = 125;
+				}
+				
+				switch (bomba){
+				case "95": case "96":
+					if (mapa02[9][5] == qnt && mapa02[9][6] == qnt){
+						vida2--;
+					}
+					break;
+				case "82": case "72":
+					if (mapa02[8][2] == qnt && mapa02[7][2] == qnt){
+						vida2--;
+					}
+					break;
+				case "48": case "49": case "410":
+					if (mapa02[4][8] == qnt && mapa02[4][9] == qnt && mapa02[4][10] == qnt){
+						vida2--;
+					}
+					break;
+				case "98": case "99": case "910":
+					if (mapa02[9][8] == qnt && mapa02[9][9] == qnt && mapa02[9][10] == qnt){
+						vida2--;
+					}
+					break;
+				case "65": case "76": case "87":
+					if (mapa02[6][5] == qnt && mapa02[7][6] == qnt && mapa02[8][7] == qnt){
+						vida2--;
+					}
+					break;
+				case "32": case "33": case "34": case "35":
+					if (mapa02[3][2] == qnt && mapa02[3][3] == qnt && mapa02[3][4] == qnt && mapa02[3][5] == qnt){
+						vida2--;
+					}
+					break;
+				case "53": case "63": case "73": case "83":
+					if (mapa02[5][3] == qnt && mapa02[5][3] == qnt && mapa02[7][3] == qnt && mapa02[8][3] == qnt){
+						vida2--;
+					}
+					break;
+				}
+				partida--;
+			}
+			else{
+				mapa01[linha][coluna] = ("    O");
+				erro2++;
+			}
+			break;
+		case "56": case "66": case "60": case "61":case "21": case "31": case "41": case "75": case "86": case "97": case "28": case "29": case "210":case "54": case "64": case "74": case "84": case "90": case "91": case "92": case "93":
+			if (mapa01[linha][coluna].equals("     . ") && jog == 1){
+				mapa01[linha][coluna] = (qnt);
+				acerto2++;
+				
+				switch (bomba){
+				case "56": case "66":
+					if (mapa01[5][6] == qnt && mapa01[6][6] == qnt){
+						vida1--;
+					}
+					break;
+				case "60": case "61":
+					if (mapa01[6][0] == qnt && mapa01[6][1] == qnt){
+						vida1--;
+					}
+					break;
+				case "21": case "31": case "41":
+					if (mapa01[2][1] == qnt && mapa01[3][1] == qnt && mapa01[4][1] == qnt){
+						vida1--;
+					}
+					break;
+				case "75": case "86": case "97":
+					if (mapa01[7][5] == qnt && mapa01[8][6] == qnt && mapa01[9][7] == qnt){
+						vida1--;
+					}
+					break;
+				case "28": case "29": case "210":
+					if (mapa01[2][8] == qnt && mapa01[2][9] == qnt && mapa01[2][10] == qnt){
+						vida1--;
+					}
+					break;
+				case "54": case "64": case "74": case "84":
+					if (mapa01[5][4] == qnt && mapa01[6][4] == qnt && mapa01[7][4] == qnt && mapa01[8][4] == qnt){
+						vida1--;
+					}
+					break;
+				case "90": case "91": case "92": case "93":
+					if (mapa01[9][0] == qnt && mapa01[9][1] == qnt && mapa01[9][2] == qnt && mapa01[9][3] == qnt){
+						vida1--;
+					}
+					break;
+				}
+				partida--;
+			}
+			else{
+				mapa02[linha][coluna] = ("    O");
+				erro1++;
+			}
+			break;
+		default:
+			if (jog == 0){
+				mapa02[linha][coluna] = ("    O");
+				erro1++;
+			}
+			else{
+				mapa01[linha][coluna] = ("    O");
+				erro2++;
+			}
+		}
+	}
+//	public static boolean teste (String coluna, int linha){
+//		boolean teste = false;
+//		String bomba = (coluna + linha);
+//		
+//		for (int i = 0; i < 21; i++){
+//			for (int j = 0; j < 4; j++){
+//				if (!bomba.equals(barcos[i][j]));{
+//					teste = true;
+//				}
+//			}
+//		}
+//		return (teste);
+//	}
+	
+	public static String robo (){
+		String bomba = "";
+		char colunaRandi;
+		int coluna, linhaRandi = 0;
+		
+		do{
+			Random gerador = new Random();
+			linhaRandi = (gerador.nextInt(9) + 1);
+			String colunaR = "ABCDEFGHIJK";  
+			Random geradorC = new Random();  
+			colunaRandi = Character.valueOf(colunaR.charAt(geradorC.nextInt(colunaR.length())));
+			coluna = caracpnum(colunaRandi);
+			
+		}
+		while (!mapa01[linhaRandi][coluna].equals("     . "));
+		bomba = String.valueOf(colunaRandi + "" + linhaRandi);
+		return (bomba);
+	}
+	
+	public static String placar(int acerto){
+		String msPlacar = "";
+		int cont_prox = 0, cont_maior;
+		
+		
+		for (int i = 0; i < 10; i++){
+			cont_maior = cont_prox;
+		    
+			for (int j = (cont_prox + 1); j < 10; j++){
+				if (placar[j] > placar[cont_maior]){
+					cont_maior = j;
+				}
+			}
+			float aux_pontuacao = placar[cont_maior];
+			placar[cont_maior] = placar[cont_prox];
+			placar[cont_prox] = aux_pontuacao;
+			
+		    String aux_nome = nome[cont_maior];
+		    nome[cont_maior] = nome[cont_prox];		    
+		    nome[cont_prox] = aux_nome;
+		    
+		    cont_prox ++;
+				
+			
+		}
+		msPlacar = ("HISTÓRICO DE GANHADORES\n\n");
+		for (int i = 0; i < 10; i++){
+			msPlacar += ((i + 1) + " - " + nome[i] + "  ................  " + placar[i] + "\n");
+		}
+		return (msPlacar);
+	}
+	
+	public static String gerador(int norte, int sul, int oeste, int leste){
+		String barco = "";
+		int linhaRandi, colunaRandi, teste;
+		
+		do{
+			teste = 0;
+			linhaRandi = 0;
+			colunaRandi = 0;
+			Random geradorColuna = new Random();
+			linhaRandi = (geradorColuna.nextInt(sul) + norte);
+			Random geradorLinha = new Random();
+		    colunaRandi = (geradorLinha.nextInt(leste) + oeste);
+		    
+		    for (int a = 0; a < 21; a++){
+		    	if(barcos[a][0].equals(String.valueOf(colunaRandi)) && barcos[a][1].equals(String.valueOf(linhaRandi))){
+					teste = 1;
+		    	}
+		    	if(barcos[a][2].equals(String.valueOf(colunaRandi)) && barcos[a][3].equals(String.valueOf(linhaRandi))){
+		    		teste = 1;
+		    	}
+		    }
+		}while (teste == 1);
+		
+	    barco = (colunaRandi + "" + linhaRandi);
+		return (barco);
+	}
+	
+	public static void orientacao(String barco, int qnt){
+		char colunaC, linhaC;
+		int coluna, linha;
+		colunaC = String.valueOf(barco).charAt(0);
+		coluna = Character.getNumericValue(colunaC);
+		linhaC = String.valueOf(barco).charAt(1);
+		linha = Character.getNumericValue(linhaC);
+		System.out.println(coluna +""+ linha+ "  === antes");
+		if (qnt == 2){
+			
+			Random gerador = new Random();
+			
+			C_L = (gerador.nextInt(2));
+
+			do {
+				if (C_L == 0){
+					randiC = (gerador.nextInt(3) - 1);
+				}
+				else{
+					randiL = (gerador.nextInt(3) - 1);
+				}
+			}
+			while (randiC == 0 && randiL == 0);
+			
+			linha += randiL;
+			coluna += randiC;
+
+		}
+		else{
+			if (C_L == 0){
+				coluna += randiC;
+			}
+			else{
+				linha += randiL;
+			}
+		}
+		novoColuna = coluna;
+		novoLinha = linha;
+		System.out.println(coluna +""+ linha+ "  === depois");
+	}
+
+}

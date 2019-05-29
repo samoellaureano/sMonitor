@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy 2 elements to &apos;CalculadoraBasicaOov6/src/projcalcversao6&apos;&#x0D;&#x0A;- Original project: &apos;CalculadoraBasicaOov5&apos;&#x0D;&#x0A;- Destination element: &apos;CalculadoraBasicaOov6/src/projcalcversao6&apos;&#x0D;&#x0A;- Original elements:&#x0D;&#x0A;     projcalcversao5.EntradaSaida.java&#x0D;&#x0A;     projcalcversao5.Comunicadora.java" description="Copy compilation units" destination="=CalculadoraBasicaOov6/src&lt;projcalcversao6" element1="/src&lt;projcalcversao5{EntradaSaida.java" element2="/src&lt;projcalcversao5{Comunicadora.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1533162185399" units="2" version="1.0"/>
+</session>

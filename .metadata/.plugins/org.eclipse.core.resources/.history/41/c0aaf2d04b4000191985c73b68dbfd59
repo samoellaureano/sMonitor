@@ -1,0 +1,177 @@
+package br.com.monitorDispositivo.script;
+
+import java.io.DataInputStream;
+import java.io.InputStream;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import br.com.monitorDispositivo.bd.conexao.Conexao;
+
+public class Tester extends TimerTask{
+	
+	public void testaTelnet (int id, String descritivo, String IPname, int porta) throws InterruptedException{
+		boolean alcance = false;
+		int cont = 0;
+		
+		do{
+			Date dataHoraAtual = new Date();
+			String data = new SimpleDateFormat("yyyy-MM-dd").format(dataHoraAtual);
+			String hora = new SimpleDateFormat("HH:mm:ss").format(dataHoraAtual);
+	        try{
+	        	System.out.println("Testa Telnet");
+	        	TimerTask con  = new Tester();
+		        Timer timer = new Timer();
+		        timer.scheduleAtFixedRate(con,1,3000);
+		        Socket s1=new Socket(IPname,porta);
+		        
+		        InputStream is=s1.getInputStream();
+		        DataInputStream dis = new DataInputStream(is);
+		        
+		        if(dis!=null){
+		        	alcance = true;
+		        }
+		        dis.close();	        
+		        s1.close(); 
+		        
+				if(alcance == true){
+					if(buscaStatus(id).equals("FALHA")){
+						gravaStatus(id, "OK");
+						gravaData(id, data+" "+hora);
+						System.out.print("Enviou E-mail ONLINE");
+						SendMail.enviarEmail("ONLINE", descritivo, IPname);
+					}
+				}           
+	        }
+	        catch(Exception e){
+	        	if(buscaStatus(id).equals("OK")){
+	        		gravaStatus(id, "FALHA");
+	        		System.out.print("Enviou E-mail OFFLINE");
+					SendMail.enviarEmail("OFFLINE", descritivo, IPname);
+				}
+	        	cont++;
+	        	Thread.sleep(2000);
+	        }
+		}while((alcance == false)&&(cont < 5));
+	}
+
+	public void testaPing (int id, String descritivo, String IPname, int porta) throws InterruptedException{
+		boolean alcance = false;
+		Date dataHoraAtual = new Date();
+		String data = new SimpleDateFormat("yyyy-MM-dd").format(dataHoraAtual);
+		String hora = new SimpleDateFormat("HH:mm:ss").format(dataHoraAtual);
+		
+		int cont=0;
+		
+		do{
+			System.out.println("Testa Ping" + descritivo + " - "+ cont);
+			try{
+	            InetAddress address = InetAddress.getByName(IPname);
+	            alcance = address.isReachable(4000);
+	            cont++;
+	        } catch (Exception e){
+	            e.printStackTrace();
+	        }
+		}while((alcance == false)&&(cont < 4)||(alcance == true)&&(cont < 4));
+		
+		if(alcance == true){
+			if((buscaStatus(id).equals("FALHA")) || (buscaStatus(id).equals(""))){
+				gravaStatus(id, "OK");
+				gravaData(id, data+" "+hora);
+				System.out.print("Enviou E-mail ONLINE");
+				SendMail.enviarEmail("ONLINE", descritivo, IPname);
+				
+			}
+		}else{
+			if((buscaStatus(id).equals("OK")) || (buscaStatus(id).equals(""))){
+				gravaStatus(id, "FALHA");
+				System.out.print("Enviou E-mail OFFLINE");
+				SendMail.enviarEmail("OFFLINE", descritivo, IPname);
+				
+			}
+		}
+	}
+	
+	public void gravaStatus(int id, String cond){
+    	String comando = "UPDATE dispositivos SET status=?";
+		comando += "WHERE id=" + id;
+		PreparedStatement p;
+		Conexao conec = new Conexao();
+		try{
+			Connection conexao = conec.abrirConexao();
+			p = conexao.prepareStatement(comando);
+			p.setString(1, cond);
+			p.executeUpdate();
+			conec.fecharConexao();
+		} catch (SQLException e){
+			e.printStackTrace();
+		}
+    }
+	
+	private void gravaData(int id, String data) {
+		String comando = "UPDATE dispositivos SET DataHoraFalha=?";
+		comando += "WHERE id=" + id;
+		PreparedStatement p;
+		Conexao conec = new Conexao();
+		try{
+			Connection conexao = conec.abrirConexao();
+			p = conexao.prepareStatement(comando);
+			p.setString(1, data);
+			p.executeUpdate();
+			conec.fecharConexao();
+		} catch (SQLException e){
+			e.printStackTrace();
+		}
+	}
+    
+    public String buscaStatus(int id){
+    	String status = "";
+    	String comando = "SELECT status FROM dispositivos WHERE id=" + id;
+		Conexao conec = new Conexao();
+		try{
+			Connection conexao = conec.abrirConexao();
+			Statement stmt = conexao.createStatement();
+			ResultSet rs = stmt.executeQuery(comando);
+			while(rs.next()){
+				status = rs.getString("status");
+			}
+			conec.fecharConexao();		
+		} catch (SQLException e){
+			e.printStackTrace();
+		}
+		return status;
+    }
+    
+    public String buscaDataFalha(int id){
+    	String data = "";
+    	String comando = "SELECT DataHoraFalha FROM dispositivos WHERE id=" + id;
+		Conexao conec = new Conexao();
+		try{
+			Connection conexao = conec.abrirConexao();
+			Statement stmt = conexao.createStatement();
+			ResultSet rs = stmt.executeQuery(comando);
+			while(rs.next()){
+				data = rs.getString("DataHoraFalha");
+			}
+			conec.fecharConexao();		
+		} catch (SQLException e){
+			e.printStackTrace();
+		}
+		return data;
+    }
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

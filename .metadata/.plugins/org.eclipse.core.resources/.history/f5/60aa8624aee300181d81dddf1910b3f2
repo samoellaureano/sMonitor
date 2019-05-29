@@ -1,0 +1,64 @@
+package br.com.jdbc;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+/*
+ *  1 - Interpretar (parse) a consulta SQL;
+	2 - Compilar a consulta SQL;
+	3 - Planejar e otimizar o caminho de busca dos dados;
+	4 - Executar a consulta otimizada, buscando e retornando os dados
+ */
+import java.sql.ResultSet;//Devolve um conjunto de resultados
+import java.sql.SQLException;//Exceção
+import java.sql.Statement;//executa uma declaração, um comando para o Banco de Dados
+import br.com.jdbcinterface.ContatoDAO;
+import br.com.armcontato.ArmazenaDadosContato;
+
+public class JDBCContatoDAO implements ContatoDAO{
+	//Declaração da variavel conexao para estabelecer a conexão com o banco de dados
+	
+	private Connection conexao;
+	//Estabelece a conexão com o banco de dados para inserir os dados
+	
+	public JDBCContatoDAO(Connection conexao){
+		this.conexao = conexao;
+	}
+	
+	public boolean inserir(ArmazenaDadosContato armdcontato){
+		//Armazena na variável comando o resultado da transação de inserção de dados
+		String comando = "INSERT INTO contato "
+				+ "(nome, endereco, telefone)"
+				+ "VALUES (?,?,?)";
+		/*
+		 * Declara a variavel objeto p para receber os valores
+		 * atribuídos aos campos e
+		 * executar a inserção dos dados
+		 */
+		
+		PreparedStatement p;
+		try{
+			//Armazena no objeto p a instrução sql de inserção dos dados
+			
+			p = this.conexao.prepareStatement(comando);
+			
+			/*
+			 * Captura os valores dos campos nome, endereco e telefone e os posiciona
+			 * respectivamente nos espaços com "?" do campo
+			 * contido no objeto p
+			 */
+			p.setString(1, armdcontato.getNome());
+			p.setString(2, armdcontato.getEndereco());
+			p.setString(3, armdcontato.getTelefone());
+			
+			//Executa a inserção de dados
+			p.execute();
+		}catch (SQLException e){
+			e.printStackTrace();
+			//Retorna falso caso algum problema tenha ocorrido.
+			return false;
+		}
+		
+		//Retorna verdadeiro se tudo correu bem.
+		return true;
+	}
+
+}

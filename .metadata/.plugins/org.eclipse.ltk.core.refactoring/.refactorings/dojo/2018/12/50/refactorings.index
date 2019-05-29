@@ -1,0 +1,23 @@
+1544480845494	Move 3 resources to 'dojo'
+1544480851005	Move 'resources' to 'dojo'
+1544481623278	Delete element
+1544484783405	Delete element
+1544484921396	Move 'js' to 'equipamento'
+1544484939176	Rename resource 'contato.js'
+1544486371728	Move 'css' to 'equipamento'
+1544486485338	Rename resource 'contato.css'
+1544486561546	Move 'cadastrarEquipamento.html' to 'WebContent'
+1544486621825	Move 'cadastrarEquipamento.html' to 'resources'
+1544486651204	Move 'resources' to 'WebContent'
+1544486694923	Move 'cadastrarEquipamento.html' to 'equipamento'
+1544561592626	Rename package 'br.com.equipamentos'
+1544561955559	Encapsulate field 'id'
+1544561972903	Encapsulate field 'nome'
+1544561979590	Encapsulate field 'patrimonio'
+1544561997105	Encapsulate field 'ambiente'
+1544563149939	Rename package 'br.com.agendaContato.bd.conexao'
+1544647833588	Rename local variable 'jdbcContato'
+1544649786202	Delete element
+1544650031029	Delete element
+1544650040400	Rename resource 'favicon (1).ico'
+1544739871877	Encapsulate field 'situacao'

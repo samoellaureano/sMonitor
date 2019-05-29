@@ -1,0 +1,29 @@
+<fieldset id="consultaField" style="display: block">
+	<legend>Consulta de Dispositivo</legend>
+	<form id="consultarDispositivo">
+		 <div class="form-group">
+		<input type="search" name="search" id="consultar" placeholder="Procurar.." class="animated-search-form" onkeyup="sMONITOR.dispositivo.buscar()">
+		</div>
+	</form>
+	<div id="resultadoDispositivos" class="result"></div>
+</fieldset>
+
+<div id="editarDispositivo" style="display:none">
+	<div class="form-field">
+		<label>Descrição: </label>
+		<input type="text" name="descricao" id="descricaoEdit">
+	</div>
+	<div class="form-field">
+		<label>Protocolo: </label>
+		<input type="text" name="protocolo" id="protocoloEdit">
+	</div>
+	<div class="form-field">
+		<label>IP/HostName: </label>
+		<input type="text" name="ipHost" id="ipHostEdit">
+	</div>
+	<div class="form-field">
+		<label>Porta: </label>
+		<input type="text" name="porta" id="portaEdit">
+	</div>
+	<input type="hidden" name="idDispositivo" id="idEdit">
+</div>

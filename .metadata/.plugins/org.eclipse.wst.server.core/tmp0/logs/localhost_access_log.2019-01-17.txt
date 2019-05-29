@@ -1,0 +1,11 @@
+127.0.0.1 - - [17/Jan/2019:09:22:26 -0200] "GET / HTTP/1.1" 404 1074
+0:0:0:0:0:0:0:1 - - [17/Jan/2019:09:22:27 -0200] "GET /dojo/ HTTP/1.1" 200 1157
+0:0:0:0:0:0:0:1 - - [17/Jan/2019:09:22:27 -0200] "GET /dojo/index.css HTTP/1.1" 200 1674
+0:0:0:0:0:0:0:1 - - [17/Jan/2019:09:22:27 -0200] "GET /dojo/resources/js/jquery-ui.js HTTP/1.1" 200 520714
+0:0:0:0:0:0:0:1 - - [17/Jan/2019:09:22:27 -0200] "GET /dojo/resources/css/jquery-ui.css HTTP/1.1" 200 35997
+0:0:0:0:0:0:0:1 - - [17/Jan/2019:09:22:27 -0200] "GET /dojo/index.js HTTP/1.1" 200 227
+0:0:0:0:0:0:0:1 - - [17/Jan/2019:09:22:27 -0200] "GET /dojo/resources/equipamento/cadastrarEquipamento.html HTTP/1.1" 200 1362
+0:0:0:0:0:0:0:1 - - [17/Jan/2019:09:22:27 -0200] "GET /dojo/resources/equipamento/consultarEquipamento.html HTTP/1.1" 200 1009
+0:0:0:0:0:0:0:1 - - [17/Jan/2019:09:22:27 -0200] "GET /dojo/resources/equipamento/css/equipamento.css HTTP/1.1" 200 1086
+0:0:0:0:0:0:0:1 - - [17/Jan/2019:09:22:27 -0200] "GET /dojo/resources/equipamento/js/equipamento.js HTTP/1.1" 200 5058
+0:0:0:0:0:0:0:1 - - [17/Jan/2019:09:22:28 -0200] "POST /dojo/ConsultaEquipamento HTTP/1.1" 200 2

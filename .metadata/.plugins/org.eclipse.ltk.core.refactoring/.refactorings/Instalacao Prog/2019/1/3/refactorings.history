@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;Instalacao Prog/Arquivos/orcamento-client.jnlp&apos; to &apos;GestaoOrcamento.jnlp&apos;" description="Rename resource &apos;orcamento-client.jnlp&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="Arquivos/orcamento-client.jnlp" name="GestaoOrcamento.jnlp" stamp="1547661944592" updateReferences="true"/>
+</session>

@@ -1,0 +1,27 @@
+/*
+ * Criando o objeto contato, a partir do objeto genérico SENAI.
+ * Isso fará com que os formulários de cadastro e busca sejam referenciados
+ * por este objeto, distinguindo-os dos objetos de outras funcionalidades
+ * e podendo individualizar as transações.
+ * Este objeto encontra-se abaixo do objeto genérico SENAI.
+ */
+SENAI.contato = new Object();
+
+$(document).ready(function(){
+	/*
+	 * Método de cadastro de contato, que por enquanto contém apenas um código
+	 * para validação de preenchimento do formulário.
+	 */
+	SENAI.contato.cadastrar = function(){
+		if(document.getElementById("nome").value == "" ||
+			document.getElementById("endereco").value == "" ||
+			document.getElementById("telefone").value == "" ||
+			document.getElementById("nascimento").value == ""){
+				alert("Todos os campos são obrigatórios de preenchimento!");
+				document.getElementById("nome").focus();
+				return false;
+		}else{
+			alert("Formulário preenchido!");
+		}
+	};
+});

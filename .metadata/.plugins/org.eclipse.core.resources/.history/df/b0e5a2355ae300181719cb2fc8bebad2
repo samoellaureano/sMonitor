@@ -1,0 +1,8 @@
+<html>
+<?php
+$horaF = new Date('H');
+
+$horaI = $horaF - 3600;
+echo $horaI . "\n" . $horaF;
+?>
+</html>
