@@ -4,7 +4,7 @@
 	<item key="TypeHierarchyViewPart.qualifiednames" value="false"/>
 	<item key="TypeHierarchyViewPart.orientation" value="3"/>
 	<item key="TypeHierarchyViewPart.linkeditors" value="false"/>
-	<item key="org.eclipse.jdt.ui.lastextjar" value="C:\Users\Samoel\Downloads"/>
+	<item key="org.eclipse.jdt.ui.lastextjar" value="C:\BACKUP\Git\sMonitor"/>
 	<item key="TypeHierarchyViewPart.hierarchyview" value="2"/>
 	<item key="delegateUpdating" value="false"/>
 	<item key="UserLibraryLoadSaveDialog.size" value="480,510"/>
@@ -98,8 +98,8 @@
 		</section>
 	</section>
 	<section name="FatJarPackageWizard">
-		<item key="FatJarPackageWizardPage.ANTSCRIPT_LOCATION" value="C:\Users\Samoel\workspace"/>
-		<item key="FatJarPackageWizardPage.LAUNCH_CONFIGURATION_SELECTION_NAME" value="Principal (4) - sMonitor"/>
+		<item key="FatJarPackageWizardPage.ANTSCRIPT_LOCATION" value="C:\Users\Samoel\workspace.xml"/>
+		<item key="FatJarPackageWizardPage.LAUNCH_CONFIGURATION_SELECTION_NAME" value="Inicio - sMonitor"/>
 		<item key="FatJarPackageWizardPage.DESTINATION_PATH_SELECTION" value="C:\Users\Samoel\Desktop\teste.jar"/>
 		<item key="FatJarPackageWizardPage.ANTSCRIPT_SAVE" value="false"/>
 		<item key="FatJarPackageWizardPage.LIBRARY_HANDLING" value="1"/>
@@ -132,7 +132,7 @@
 		<item key="create_package_info_java" value="false"/>
 	</section>
 	<section name="BuildPathsPropertyPage">
-		<item key="pageIndex" value="3"/>
+		<item key="pageIndex" value="1"/>
 	</section>
 	<section name="completion_proposal_size">
 	</section>

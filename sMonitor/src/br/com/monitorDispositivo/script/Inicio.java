@@ -5,20 +5,21 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.mail.MessagingException;
+
 import br.com.monitorDispositivo.bd.conexao.Conexao;
 import br.com.monitorDispositivo.objetos.Dispositivo;
 
 public class Inicio {
-	
-	static Conexao conec = new Conexao();
-
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) throws InterruptedException, MessagingException {
+		Conexao conec = new Conexao();
 
 		while(true){
 			System.out.println("Inicio");
 			List<Dispositivo> listaDispositivos = new ArrayList<Dispositivo>();
 			Tester tester = new Tester();
-			listaDispositivos = buscarDispositivos();
+			listaDispositivos = buscarDispositivos(conec);
 			
 			for(Dispositivo dispositivo : listaDispositivos){
 				int id = dispositivo.getId();
@@ -26,18 +27,19 @@ public class Inicio {
 				String IPname = dispositivo.getIPname();
 				String protocolo = dispositivo.getProtocolo();
 				int porta = dispositivo.getPorta();
+				
 				if(protocolo.equals("Telnet")){
 					tester.testaTelnet(id, descritivo, IPname, porta);
 				}else if(protocolo.equals("TCP/IP")){
 					tester.testaPing(id, descritivo, IPname, porta);
 				}
 			}
-			Thread.sleep(15000);
+			//Thread.sleep(15000);
 		}
          
     }
     
-    public static List<Dispositivo> buscarDispositivos(){
+    public static List<Dispositivo> buscarDispositivos(Conexao conec){
 		String comando = "SELECT * FROM dispositivos ";
 		List<Dispositivo> listDispositivo = new ArrayList<Dispositivo>();
 		Dispositivo dispositivo = null;
@@ -70,11 +72,6 @@ public class Inicio {
 		}
 		return listDispositivo;
 	}
- 
-    public void run() {
-        // TODO Auto-generated method stub
-         
-    }
 
 }
 

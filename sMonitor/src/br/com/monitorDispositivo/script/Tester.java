@@ -14,12 +14,14 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.mail.MessagingException;
+
 import br.com.monitorDispositivo.bd.conexao.Conexao;
 
 public class Tester extends TimerTask{
 
 	@SuppressWarnings("unused")
-	public void testaTelnet (int id, String descritivo, String IPname, int porta) throws InterruptedException{
+	public void testaTelnet (int id, String descritivo, String IPname, int porta) throws InterruptedException, MessagingException{
 		boolean alcance = false;
 		int cont = 0;
 		Date dataHoraAtual = new Date();
@@ -28,7 +30,6 @@ public class Tester extends TimerTask{
 
 		do{			
 			try{
-				System.out.println("Testa Telnet "+ descritivo + " - "+ cont);
 				TimerTask con  = new Tester();
 				Timer timer = new Timer();
 				timer.scheduleAtFixedRate(con,1,3000);
@@ -49,7 +50,8 @@ public class Tester extends TimerTask{
 			catch(Exception e){
 				cont++;
 			}
-		}while((alcance == false)&&(cont < 5));
+		}while((alcance == false)&&(cont < 3));
+		System.out.println("Testa Telnet "+ descritivo + " - "+ cont);
 
 		if(alcance == true){
 			if(buscaStatus(id).equals("FALHA")){
@@ -72,7 +74,7 @@ public class Tester extends TimerTask{
 	}
 
 	@SuppressWarnings("static-access")
-	public void testaPing (int id, String descritivo, String IPname, int porta) throws InterruptedException{
+	public void testaPing (int id, String descritivo, String IPname, int porta) throws InterruptedException, MessagingException{
 		Date dataHoraAtual = new Date();
 		String data = new SimpleDateFormat("yyyy-MM-dd").format(dataHoraAtual);
 		String hora = new SimpleDateFormat("HH:mm:ss").format(dataHoraAtual);
@@ -81,10 +83,9 @@ public class Tester extends TimerTask{
 		boolean alcance;
 		do{
 			alcance = false;
-			System.out.println("Testa Ping " + descritivo + " - "+ cont);
 			try{
 				InetAddress address = InetAddress.getByName(IPname);
-				alcance = address.isReachable(3000);
+				alcance = address.isReachable(4000);
 				if(alcance == false) {
 					cont++;
 					new Thread().sleep(1000);
@@ -92,7 +93,8 @@ public class Tester extends TimerTask{
 			} catch (Exception e){
 				e.printStackTrace();
 			}
-		}while((alcance == false && cont < 4)||(alcance == true && cont > 4));
+		}while((alcance == false && cont < 3)||(alcance == true && cont > 4));
+		System.out.println("Testa Ping " + descritivo + " - "+ cont);
 
 		if(alcance == true){
 			if((buscaStatus(id).equals("FALHA")) || (buscaStatus(id).equals(""))){

@@ -12,9 +12,11 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import br.com.monitorBot.bot;
+
 public class SendMail {
 
-	public static void enviarEmail (String status, String descritivo, String IPname){
+	public static void enviarEmail (String status, String descritivo, String IPname) throws MessagingException{
 		Date dataHoraAtual = new Date();
 		String data = new SimpleDateFormat("dd/MM/yyyy").format(dataHoraAtual);
 		String hora = new SimpleDateFormat("HH:mm:ss").format(dataHoraAtual);
@@ -40,21 +42,25 @@ public class SendMail {
         session.setDebug(true);
 
         try {
-
               Message message = new MimeMessage(session);
               message.setFrom(new InternetAddress("samoel.angelica@fiesc.com.br")); //Remetente
 
               Address[] toUser = InternetAddress //Destinatário(s)
-                         .parse("samoel.angelica@fiesc.com.br,fabio.bertoni@fiesc.com.br");  
+                         .parse("samoel.angelica@fiesc.com.br");  
 
               message.setRecipients(Message.RecipientType.TO, toUser);
               message.setSubject("sMonitor - " + descritivo + " - " + IPname);//Assunto
               message.setText(descritivo + " esta " + status + "\nDATA: " + data + "\nHORA: " + hora);
               /**M�todo para enviar a mensagem criada*/
+              
+              
+              
               Transport.send(message);
 
          } catch (MessagingException e) {
               throw new RuntimeException(e);
         }
+        bot bot = new bot();
+        bot.enviarMensagemTelegram(descritivo + " esta " + status + "\nDATA: " + data + "\nHORA: " + hora);
 	}
 }
